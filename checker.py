@@ -1,5 +1,5 @@
 import pygame
-from constants import RED, WHITE, BLUE, SQUARE_SIZE
+from constants import RED, WHITE, BLUE, SQUARE_SIZE, ROWS
 from board import Board
 
 class Game:
@@ -35,8 +35,6 @@ class Game:
         if piece != 0 and piece.color == self.turn:
             self.selected = piece
             self.valid_moves = self.board.get_valid_moves(piece)
-            max_len_move = max([len(i) for i in self.valid_moves.values()], default=100000)
-            self.valid_moves = {key: val for key,val in self.valid_moves.items() if len(val) >= max_len_move}
             return True
             
         return False
@@ -65,3 +63,10 @@ class Game:
             self.turn = WHITE
         else:
             self.turn = RED
+
+    def get_board(self):
+        return self.board
+
+    def ai_move(self, board):
+        self.board = board
+        self.change_turn()
