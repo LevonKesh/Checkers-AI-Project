@@ -4,30 +4,33 @@ import pygame
 from constants import WHITE, RED
 
 
-def minimax(position, depth, max_player, game):
-    if depth == 0 or position.winner() != None:
+def alpha_beta(position, depth, alpha, beta, to_max, game):
+    if depth == 0 or position.winner() is not None:
         return position.evaluate(), position
-
-    if max_player:
-        maxEval = float('-inf')
+    if to_max:
+        max_eval = float('-inf')
         best_move = None
         for move in get_all_moves(position, WHITE, game):
-            evaluation = minimax(move, depth - 1, False, game)[0]
-            maxEval = max(maxEval, evaluation)
-            if maxEval == evaluation:
+            evaluation = alpha_beta(move, depth - 1, alpha, beta, False, game)[0]
+            max_eval = max(max_eval, evaluation)
+            alpha = max(alpha, evaluation)
+            if max_eval == evaluation:
                 best_move = move
-
-        return maxEval, best_move
+            if beta <= alpha:
+                break
+        return max_eval, best_move
     else:
-        minEval = float('inf')
+        min_eval = float('inf')
         best_move = None
         for move in get_all_moves(position, RED, game):
-            evaluation = minimax(move, depth - 1, True, game)[0]
-            minEval = min(minEval, evaluation)
-            if minEval == evaluation:
+            evaluation = alpha_beta(move, depth - 1, alpha, beta, True, game)[0]
+            min_eval = min(min_eval, evaluation)
+            beta = min(beta, evaluation)
+            if min_eval == evaluation:
                 best_move = move
-
-        return minEval, best_move
+            if beta <= alpha:
+                break
+        return min_eval, best_move
 
 
 def simulate_move(piece, move, board, game, skip):
@@ -58,4 +61,3 @@ def get_all_moves(board, color, game):
 #     game.draw_valid_moves(valid_moves.keys())
 #     pygame.display.update()
 #     #pygame.time.delay(100)
-
