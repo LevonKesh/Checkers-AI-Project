@@ -3,9 +3,10 @@ from constants import RED, WHITE, BLUE, SQUARE_SIZE, ROWS
 from board import Board
 
 class Game:
-    def __init__(self, win):
+    def __init__(self, win, ai1 = True, ai2 = False):
         self._init()
         self.win = win
+        self.ai1_color = RED
     
     def update(self):
         self.board.draw(self.win)
@@ -15,7 +16,7 @@ class Game:
     def _init(self):
         self.selected = None
         self.board = Board()
-        self.turn = RED
+        self.turn = WHITE
         self.valid_moves = {}
 
     def winner(self):

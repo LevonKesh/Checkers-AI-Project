@@ -29,14 +29,14 @@ def main():
     while run:
         clock.tick(FPS)
 
-        if game.turn == WHITE:
+        if game.turn == RED:
             if MINIMAX:
                 now = datetime.now().timestamp()
-                value, new_board = minimax(game.get_board(), 4, WHITE, game)
+                value, new_board = minimax(game.get_board(), 4,True, WHITE, game)
                 print("Passed: ", datetime.now().timestamp() - now )
             else:
                 now = datetime.now().timestamp()
-                value, new_board = alpha_beta(game.get_board(),5, float('-inf'), float('inf'), True, game)
+                value, new_board = alpha_beta(game.get_board(),5, float('-inf'), float('inf'), True, WHITE, game)
                 print("Passed: ", datetime.now().timestamp() - now )
             game.ai_move(new_board)
 

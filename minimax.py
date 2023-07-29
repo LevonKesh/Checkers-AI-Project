@@ -4,15 +4,24 @@ import pygame
 from constants import WHITE, RED
 
 
-def minimax(position, depth, max_player, game):
+def minimax(position, depth, max_player, color, game):
     if depth == 0 or position.winner() != None:
-        return position.evaluate(), position
+        if color == WHITE:
+            return position.white_evaluate(), position
+        if color == RED:
+            return position.red_evaluate(), position
+    if color == WHITE:
+        ai_color = RED
+        enemy_color = WHITE
+    elif color == RED:
+        ai_color = WHITE
+        enemy_color = RED
 
     if max_player:
         maxEval = float('-inf')
         best_move = None
-        for move in get_all_moves(position, WHITE, game):
-            evaluation = minimax(move, depth - 1, False, game)[0]
+        for move in get_all_moves(position, ai_color, game):
+            evaluation = minimax(move, depth - 1, False, enemy_color, game)[0]
             maxEval = max(maxEval, evaluation)
             if maxEval == evaluation:
                 best_move = move
@@ -21,8 +30,8 @@ def minimax(position, depth, max_player, game):
     else:
         minEval = float('inf')
         best_move = None
-        for move in get_all_moves(position, RED, game):
-            evaluation = minimax(move, depth - 1, True, game)[0]
+        for move in get_all_moves(position, enemy_color, game):
+            evaluation = minimax(move, depth - 1, True, ai_color, game)[0]
             minEval = min(minEval, evaluation)
             if minEval == evaluation:
                 best_move = move
@@ -58,4 +67,3 @@ def get_all_moves(board, color, game):
 #     game.draw_valid_moves(valid_moves.keys())
 #     pygame.display.update()
 #     #pygame.time.delay(100)
-
